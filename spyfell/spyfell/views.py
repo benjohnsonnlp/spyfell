@@ -1,16 +1,7 @@
-from django.shortcuts import render
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.conf.urls import include, url
+from django.contrib import admin
 
-
-def index(request):
-    return render(request, 'spyfell/index.html', None)
-
-
-class SessionList(APIView):
-    '''
-    List active sessions
-    '''
-    def get(self, request, format=None):
-        return Response(['1'])
+urlpatterns = [
+    url(r'^&', include('game.urls')),
+    url(r'^admin/', admin.site.urls),
+]
