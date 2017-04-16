@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,6 +11,11 @@ def index(request):
         'sessions': sessions
     }
     return render(request, 'game/index.html', context)
+
+
+def session(request, session_id):
+    session = get_object_or_404(Session, pk=session_id)
+    return render(request, 'game/session.html', {"session": session})
 
 
 class SessionList(APIView):

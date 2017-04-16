@@ -1,0 +1,14 @@
+{% load static %}
+<link rel="stylesheet" href="{% static '/game/style.css' %}">
+<header>
+    <title>{{ session.name }}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="{% static '/game/session.js' %}"></script>
+</header>
+<body>
+    <div id="menu">
+        <h1>{{ session.name }}</h1>
+        <div align="right"> <i><small>Started at {{ session.created }}</small></i></div>
+    </div>
+</body>
+
