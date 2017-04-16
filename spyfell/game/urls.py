@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^$', views.index),
     # url(r'^sessions/', views.SessionList.as_view()),
     url(r'^sessions/(?P<session_id>[0-9]+)/$', views.session),
+    url(r'^sessions/create/$', views.create_session),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

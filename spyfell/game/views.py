@@ -18,10 +18,14 @@ def session(request, session_id):
     return render(request, 'game/session.html', {"session": session})
 
 
+def create_session(request):
+    return render(request, 'game/createSession.html', None)
+
+
 class SessionList(APIView):
-    '''
+    """
     List active sessions
-    '''
+    """
 
     def get(self, request, format=None):
         return Response(['1'])
