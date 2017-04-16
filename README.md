@@ -7,8 +7,12 @@ NOTE:  project requires python 3
 ```
 pip install -r requirements.txt
 ```
-2.  Start web server
+2.  Create databases
 ```
 cd spyfell
+python manage.py migrate game
+```
+3.  Start web server
+```
 python manage.py runserver
 ```
