@@ -1,4 +1,7 @@
+import logging
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -20,6 +23,15 @@ def session(request, session_id):
 
 def create_session(request):
     return render(request, 'game/createSession.html', None)
+
+
+def save_session(request):
+    name = request.POST['name']
+    logging.info('Creating session with name: {}'.format(name))
+    session = Session.objects.create(name=name)
+    print('Id is {}'.format(session.pk))
+    session.save()
+    return HttpResponseRedirect(reverse('session_details', args=(session.pk,)))
 
 
 class SessionList(APIView):

@@ -8,8 +8,11 @@
 <body>
     <div id="menu">
         <h1>Create a new session</h1>
-        <input type="text">
-        <input type="button" value="Done"/>
+        <form action="{% url 'session_create' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="name" value="A Spyfell Session" />
+            <input type="submit" value="Done" />
+        </form>
     </div>
 </body>
 
