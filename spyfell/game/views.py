@@ -9,7 +9,7 @@ from .models import Session
 
 
 def index(request):
-    sessions = Session.objects.order_by('name')
+    sessions = Session.objects.order_by('created')
     context = {
         'sessions': sessions
     }

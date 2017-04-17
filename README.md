@@ -16,7 +16,7 @@ python manage.py migrate game
 ```
 python manage.py runserver
 ```
-4.  Optionally, to forward to publish internet
+4.  Optionally, to forward to public internet
 ```
-ngrok http [port] -host-header="localhost:[port]"
+ngrok http 8000 -host-header="localhost:8000"
 ```
