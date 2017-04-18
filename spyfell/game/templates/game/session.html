@@ -40,9 +40,6 @@
                 <input type="submit" value="Done"/>
             </form>
             <form action="{% url 'session_details' session_id=session.pk %}?player={{ active_player.pk }}" method="get">
-                {% csrf_token %}
-                <input type="hidden" name="player" value="{{ active_player.pk }}"/>
-                <input type="hidden" name="session" value="{{ session.pk }}"/>
                 <input type="submit" value="Check if someone else has set a location"/>
             </form>
         {% endif %}
