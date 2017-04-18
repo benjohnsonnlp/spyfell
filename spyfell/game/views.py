@@ -1,4 +1,3 @@
-import json
 import logging
 
 from django.http import HttpResponseRedirect
@@ -8,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Session, Player, Location
+
+logger = logging.getLogger(__name__)
 
 
 def login(request):
@@ -23,7 +24,7 @@ def save_player(request):
         pass
     if not player:
         player = Player.objects.create(name=name)
-    logging.info('Logging in player {} with id {}'.format(name, player.pk))
+    logger.info('Logging in player {} with id {}'.format(name, player.pk))
     player.save()
     return HttpResponseRedirect(reverse('session_list') + "?player={}".format(player.pk))
 
@@ -54,7 +55,7 @@ def create_session(request):
 def save_session(request):
     name = request.POST['name']
     session = Session.objects.create(name=name)
-    logging.info('Creating session with name: {} and id {}'.format(name, session.pk))
+    logger.info('Creating session with name: {} and id {}'.format(name, session.pk))
     session.save()
     return HttpResponseRedirect(reverse('session_details', args=(session.pk,)))
 
@@ -64,7 +65,7 @@ def save_location(request):
 
     location = Location.objects.create(name=request.POST['name'], created_by=player)
     location.save()
-    logging.info('Creating location with name {} from player {} and id {}'.format(location.name,
+    logger.info('Creating location with name {} from player {} and id {}'.format(location.name,
                                                                                   location.created_by,
                                                                                   location.pk))
 
