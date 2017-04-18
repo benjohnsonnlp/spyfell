@@ -49,15 +49,17 @@ def session(request, session_id):
 
 
 def create_session(request):
-    return render(request, 'game/createSession.html', None)
+    player = get_object_or_404(Player, pk=request.GET['player'])
+    return render(request, 'game/createSession.html', {'player': player})
 
 
 def save_session(request):
+    player = get_object_or_404(Player, pk=request.POST['player_id'])
     name = request.POST['name']
     session = Session.objects.create(name=name)
     logger.info('Creating session with name: {} and id {}'.format(name, session.pk))
     session.save()
-    return HttpResponseRedirect(reverse('session_details', args=(session.pk,)))
+    return HttpResponseRedirect(reverse('session_details', args=(session.pk,)) + "?player={}".format(player.pk))
 
 
 def save_location(request):
