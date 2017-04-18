@@ -9,6 +9,13 @@
     <div id="menu">
         <h1>{{ session.name }}</h1>
         <div align="right"> <i><small>Started at {{ session.created }}</small></i></div>
+        <ul id="playerList">
+            {% if players %}
+                {% for player in players %}
+                    <li>{{ player.name }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
     </div>
 </body>
 

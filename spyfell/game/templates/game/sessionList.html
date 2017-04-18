@@ -13,7 +13,7 @@
         <ul id="sessionList">
             {% if sessions %}
                 {% for session in sessions %}
-                    <li><a href="sessions/{{ session.id }}/">{{ session.name }}</a> <i><small>{{ session.created }}</small></i></li>
+                    <li><a href="{{ session.id }}/?player={{ playerId }}">{{ session.name }}</a> <i><small>{{ session.created }}</small></i></li>
                 {% endfor %}
             {% endif %}
             <li><a href="sessions/create">[Create a session]</a></li>

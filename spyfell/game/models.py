@@ -11,4 +11,4 @@ class Session(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=300)
-    active_session = models.ForeignKey(Session)
+    active_session = models.ForeignKey(Session, null=True)
