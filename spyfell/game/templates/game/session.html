@@ -8,28 +8,42 @@
 <body>
     <div id="menu">
         <h1>{{ session.name }}</h1>
-        <div align="right"> <i><small>Started at {{ session.created }}</small></i></div>
+        <div align="right"><i>
+            <small>Started at {{ session.created }}</small>
+        </i></div>
         <ul id="playerList">
             {% if players %}
-                {% for player in players %}
-                    <li>{{ player.name }}</li>
-                {% endfor %}
+            {% for player in players %}
+            <li>{{ player.name }}</li>
+            {% endfor %}
             {% endif %}
         </ul>
         {% if session.current_location %}
-            <h2> You are at {{ session.current_location }}</h2>
-        {% else %}
-             <form action="{% url 'save_location' %}" method="post">
+            {% if active_player.is_spy %}
+                <h2>Be cool.  You are the spy.</h2>
+            {% else %}
+                <h2>You are at {{ session.current_location }}</h2>
+            {% endif %}
+
+            <form action="{% url 'remove_location' %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="player_id" value="{{ active_player.pk }}" />
-                <input type="hidden" name="session" value="{{ session.pk }}" />
-                <input type="text" name="name" value="Suggest a location" />
-                <input type="submit" value="Done" />
+                <input type="hidden" name="player_id" value="{{ active_player.pk }}"/>
+                <input type="hidden" name="session" value="{{ session.pk }}"/>
+                <input type="submit" value="All done?  Do a new location!"/>
+            </form>
+        {% else %}
+            <form action="{% url 'save_location' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="player_id" value="{{ active_player.pk }}"/>
+                <input type="hidden" name="session" value="{{ session.pk }}"/>
+                <input type="text" name="name" value="Suggest a location"/>
+                <input type="submit" value="Done"/>
             </form>
             <form action="{% url 'session_details' session_id=session.pk %}?player={{ active_player.pk }}" method="get">
-                <input type="hidden" name="player" value="{{ active_player.pk }}" />
-                <input type="hidden" name="session" value="{{ session.pk }}" />
-                <input type="submit" value="Check if someone else has set a location" />
+                {% csrf_token %}
+                <input type="hidden" name="player" value="{{ active_player.pk }}"/>
+                <input type="hidden" name="session" value="{{ session.pk }}"/>
+                <input type="submit" value="Check if someone else has set a location"/>
             </form>
         {% endif %}
     </div>
