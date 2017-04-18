@@ -16,7 +16,11 @@ def login(request):
 
 def save_player(request):
     name = request.POST['name']
-    player = Player.objects.get(name=name)
+    player = None
+    try:
+        player = Player.objects.get(name=name)
+    except:
+        pass
     if not player:
         player = Player.objects.create(name=name)
     logging.info('Logging in player {} with id {}'.format(name, player.pk))
