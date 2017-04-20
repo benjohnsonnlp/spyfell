@@ -36,7 +36,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="player_id" value="{{ active_player.pk }}"/>
                 <input type="hidden" name="session" value="{{ session.pk }}"/>
-                <input type="text" name="name" value="Suggest a location"/>
+                <input type="text" name="name" placeholder="Suggest a location"/>
                 <input type="submit" value="Done"/>
             </form>
             <form action="{% url 'session_details' session_id=session.pk %}?player={{ active_player.pk }}" method="get">

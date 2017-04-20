@@ -10,7 +10,7 @@
         <form action="{% url 'session_create' %}" method="post">
             {% csrf_token %}
             <input type="hidden" name="player_id" value="{{ player.pk }}" />
-            <input type="text" name="name" value="A Spyfell Session" />
+            <input type="text" name="name" placeholder="A Spyfell Session" />
             <input type="submit" value="Done" />
         </form>
     </div>
