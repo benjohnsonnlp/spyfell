@@ -32,6 +32,7 @@
                 <input type="submit" value="All done?  Do a new location!"/>
             </form>
         {% else %}
+            <h3>Add a location only after everyone you're playing with has joined</h3>
             <form action="{% url 'save_location' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="player_id" value="{{ active_player.pk }}"/>
