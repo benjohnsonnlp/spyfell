@@ -3,7 +3,6 @@
 <header>
     <title>{{ session.name }}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="{% static '/game/session.js' %}"></script>
 </header>
 <body>
     <div id="menu">
@@ -13,9 +12,9 @@
         </i></div>
         <ul id="playerList">
             {% if players %}
-            {% for player in players %}
-            <li>{{ player.name }}</li>
-            {% endfor %}
+                {% for player in players %}
+                <li>{{ player.name }}</li>
+                {% endfor %}
             {% endif %}
         </ul>
         {% if session.current_location %}
@@ -40,7 +39,8 @@
                 <input type="text" name="name" placeholder="Suggest a location"/>
                 <input type="submit" value="Done"/>
             </form>
-            <form action="{% url 'session_details' session_id=session.pk %}?player={{ active_player.pk }}" method="get">
+            <form action="{% url 'session_details' session_id=session.pk %}" method="get">
+                <input type="hidden" name="player" value="{{ active_player.pk }}"/>
                 <input type="submit" value="Check if someone else has set a location"/>
             </form>
         {% endif %}

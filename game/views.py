@@ -43,6 +43,7 @@ def session_list(request):
 def session(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
     players = Player.objects.filter(active_session=session_id).select_related()
+    print(request.GET)
     active_player = get_object_or_404(Player, pk=request.GET['player'])
     active_player.active_session = session
     active_player.save()
