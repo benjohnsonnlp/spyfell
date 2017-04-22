@@ -21,7 +21,7 @@
             {% if active_player.is_spy %}
                 <h2>Be cool.  You are the spy.</h2>
             {% else %}
-                <h2>You are at {{ session.current_location }}</h2>
+                <h2>You are at {{ session.current_location }} <img src="{{ image_url }}"/></h2>
             {% endif %}
 
             <form action="{% url 'remove_location' %}" method="post">

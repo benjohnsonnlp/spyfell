@@ -1,6 +1,8 @@
 import logging
 import random
 
+import requests
+from bs4 import BeautifulSoup
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -10,6 +12,14 @@ from rest_framework.views import APIView
 from .models import Session, Player, Location
 
 logger = logging.getLogger(__name__)
+
+
+def get_image(location_name):
+    search_url = "https://www.google.com/search?site=&tbm=isch&q={}".format(location_name)
+    html = requests.get(search_url).text
+    soup = BeautifulSoup(html, 'html.parser')
+    image_url = soup.select('td a img')[0].get('src')
+    return image_url
 
 
 def login(request):
@@ -43,11 +53,13 @@ def session_list(request):
 def session(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
     players = Player.objects.filter(active_session=session_id).select_related()
-    print(request.GET)
     active_player = get_object_or_404(Player, pk=request.GET['player'])
     active_player.active_session = session
     active_player.save()
-    return render(request, 'game/session.html', {"session": session, "active_player": active_player, "players": players})
+    context = {"session": session, "active_player": active_player, "players": players}
+    if session.current_location:
+        context['image_url'] = get_image(session.current_location.name)
+    return render(request, 'game/session.html', context)
 
 
 def create_session(request):
@@ -70,8 +82,8 @@ def save_location(request):
     location = Location.objects.create(name=request.POST['name'], created_by=active_player)
     location.save()
     logger.info('Creating location with name {} from player {} and id {}'.format(location.name,
-                                                                                  location.created_by,
-                                                                                  location.pk))
+                                                                                 location.created_by,
+                                                                                 location.pk))
 
     session = get_object_or_404(Session, pk=request.POST['session'])
     session.current_location = location
