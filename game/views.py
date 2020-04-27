@@ -112,3 +112,9 @@ class SessionList(APIView):
 
     def get(self, request, format=None):
         return Response(['1'])
+
+
+def remove_session(request, player_id, session_id):
+    session = get_object_or_404(Session, pk=session_id)
+    session.delete()
+    return HttpResponseRedirect(reverse("session_list", args=[player_id]))

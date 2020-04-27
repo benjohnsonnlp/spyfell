@@ -18,6 +18,7 @@ urlpatterns = [
     path('player/<int:player_id>/sessions/<int:session_id>/removeLocation', views.remove_location,
          name='remove_location'),
     path('player/<int:player_id>/sessions/create', views.create_session, name='create_session'),
+    path('player/<int:player_id>/sessions/<int:session_id>/remove', views.remove_session, name='remove_session'),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

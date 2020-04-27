@@ -37,8 +37,14 @@
             <ul class="list-group" id="sessionList">
                 {% if sessions %}
                     {% for session in sessions %}
-                        <li class="list-group-item"><a href="{% url 'session_details' player.id session.id %}">{{ session.name }}</a>
-                            <i><small>{{ session.created }}</small></i></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'session_details' player.id session.id %}">
+                                {{ session.name }}
+                                <i><small>{{ session.created }}</small></i>
+                            </a>
+
+                            <a href="{% url 'remove_session' player.id session.id %}" class="badge badge-primary badge-pill">remove</a>
+                        </li>
                     {% endfor %}
                 {% endif %}
                 <li class="list-group-item">
