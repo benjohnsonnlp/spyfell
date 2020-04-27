@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['docbenjohnson.com', '127.0.0.1']
 
 INSTALLED_APPS = [
     'game.apps.GameConfig',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
