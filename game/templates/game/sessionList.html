@@ -44,7 +44,7 @@
                 <li class="list-group-item">
                     <form action="{% url 'create_session' player.id %}" method="POST">
                         {% csrf_token %}
-                        <input type="text" placeholder="Create a session..." name="session_name" />
+                        <input type="text" class="form-control" placeholder="Create a session..." name="session_name" />
                     </form>
                 </li>
             </ul>
