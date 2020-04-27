@@ -1,5 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.urls import path
 
 from . import views
 
@@ -9,12 +10,14 @@ urlpatterns = [
     # url(r'^', include(router.urls)),
     url(r'^$', views.login, name='login'),
     # url(r'^sessions/', views.SessionList.as_view()),
-    url(r'^locations/submit', views.save_location, name='save_location'),
-    url(r'^locations/remove', views.remove_location, name='remove_location'),
+
     url(r'^player/submit$', views.save_player, name='save_player'),
-    url(r'^sessions/$', views.session_list, name='session_list'),
-    url(r'^sessions/(?P<session_id>[0-9]+)/', views.session, name='session_details'),
-    url(r'^sessions/create/$', views.create_session),
-    url(r'^sessions/create/submit/$', views.save_session, name='session_create'),
+    path('player/<int:player_id>/sessions', views.session_list, name='session_list'),
+    path('player/<int:player_id>/sessions/<int:session_id>/', views.session, name='session_details'),
+    path('player/<int:player_id>/sessions/<int:session_id>/submitLocation', views.save_location, name='save_location'),
+    path('player/<int:player_id>/sessions/<int:session_id>/removeLocation', views.remove_location,
+         name='remove_location'),
+    path('player/<int:player_id>/sessions/create', views.create_session, name='create_session'),
+
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

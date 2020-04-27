@@ -28,56 +28,48 @@ def login(request):
 
 def save_player(request):
     name = request.POST['name']
-    player = None
-    try:
-        player = Player.objects.get(name=name)
-    except:
-        pass
-    if not player:
-        player = Player.objects.create(name=name)
-    logger.info('Logging in player {} with id {}'.format(name, player.pk))
+    player, _ = Player.objects.get_or_create(name=name)
+
+    logger.info('Logging in player {} with id {}'.format(name, player.id))
     player.save()
-    return HttpResponseRedirect(reverse('session_list') + "?player={}".format(player.pk))
+    return HttpResponseRedirect(reverse('session_list', args=[player.id]))
 
 
-def session_list(request):
+def session_list(request, player_id):
     sessions = Session.objects.order_by('created')
-    player_id = request.GET['player']
     context = {
         'sessions': sessions,
-        'playerId': player_id,
+        'player': get_object_or_404(Player, pk=player_id),
     }
     return render(request, 'game/sessionList.html', context)
 
 
-def session(request, session_id):
+def session(request, player_id, session_id):
     session = get_object_or_404(Session, pk=session_id)
-    players = Player.objects.filter(active_session=session_id).select_related()
-    active_player = get_object_or_404(Player, pk=request.GET['player'])
+    players = list(session.player_set.all())
+    active_player = get_object_or_404(Player, pk=player_id)
     active_player.active_session = session
     active_player.save()
-    context = {"session": session, "active_player": active_player, "players": players}
-    if session.current_location:
-        context['image_url'] = get_image(session.current_location.name)
+    context = {
+        "session": session,
+        "active_player": active_player,
+        "players": players
+    }
+    # if session.current_location:
+    #     context['image_url'] = get_image(session.current_location.name)
     return render(request, 'game/session.html', context)
 
 
-def create_session(request):
-    player = get_object_or_404(Player, pk=request.GET['player'])
-    return render(request, 'game/createSession.html', {'player': player})
-
-
-def save_session(request):
-    player = get_object_or_404(Player, pk=request.POST['player_id'])
-    name = request.POST['name']
-    session = Session.objects.create(name=name)
-    logger.info('Creating session with name: {} and id {}'.format(name, session.pk))
+def create_session(request, player_id):
+    player = get_object_or_404(Player, pk=player_id)
+    session_name = request.POST['session_name']
+    session = Session(name=session_name)
     session.save()
-    return HttpResponseRedirect(reverse('session_details', args=(session.pk,)) + "?player={}".format(player.pk))
+    return HttpResponseRedirect(reverse('session_details', args=[player.id, session.id]))
 
 
-def save_location(request):
-    active_player = get_object_or_404(Player, pk=request.POST['player_id'])
+def save_location(request, player_id, session_id):
+    active_player = get_object_or_404(Player, pk=player_id)
 
     location = Location.objects.create(name=request.POST['name'], created_by=active_player)
     location.save()
@@ -85,10 +77,10 @@ def save_location(request):
                                                                                  location.created_by,
                                                                                  location.pk))
 
-    session = get_object_or_404(Session, pk=request.POST['session'])
+    session = get_object_or_404(Session, pk=session_id)
     session.current_location = location
     session.save()
-    players = Player.objects.filter(active_session=session.pk).select_related()
+    players = session.player_set.all()
     for candidate in players:
         candidate.is_spy = False
         candidate.save()
@@ -100,16 +92,17 @@ def save_location(request):
             candidate.save()
             break
 
-    return HttpResponseRedirect(reverse('session_details', args=(session.pk,)) + "?player={}".format(active_player.pk))
+    return HttpResponseRedirect(reverse('session_details', args=(active_player.id, session.pk,)))
 
 
-def remove_location(request):
-    player = get_object_or_404(Player, pk=request.POST['player_id'])
+def remove_location(request, player_id, session_id):
+    player = get_object_or_404(Player, pk=player_id)
 
-    session = get_object_or_404(Session, pk=request.POST['session'])
+    session = get_object_or_404(Session, pk=session_id)
+
     session.current_location = None
     session.save()
-    return HttpResponseRedirect(reverse('session_details', args=(session.pk,)) + "?player={}".format(player.pk))
+    return HttpResponseRedirect(reverse('session_details', args=(player.id, session.pk,)))
 
 
 class SessionList(APIView):
