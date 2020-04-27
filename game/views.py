@@ -23,7 +23,7 @@ def get_image(location_name):
 
 
 def login(request):
-    return render(request, 'game/createPlayer.html', None)
+    return render(request, 'game/index.html', None)
 
 
 def save_player(request):
