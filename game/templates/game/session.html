@@ -39,9 +39,14 @@
                 {% if active_player.is_spy %}
                     <h2>Be cool. You are the spy.</h2>
                 {% else %}
-                    <h2>You are at {{ session.current_location }} <img src="{{ image_url }}"/></h2>
+                    <h2>You are at {{ session.current_location }}</h2>
                 {% endif %}
+                <div>
+                    You have (approx.)
+                    <span id="timer" minutes="{{ players | length }}">
 
+                    </span> remaining.
+                </div>
                 <form action="{% url 'remove_location' active_player.id session.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" value="All done?  Do a new location!"/>
@@ -49,7 +54,8 @@
             {% else %}
                 <form action="{% url 'save_location' active_player.id session.id %}" method="post">
                     {% csrf_token %}
-                    <input type="text" class="form-control" name="name" placeholder="If everyone is here, suggest a location"/>
+                    <input type="text" class="form-control" name="name"
+                           placeholder="If everyone is here, suggest a location"/>
                 </form>
                 <br/>
                 <form action="{% url 'session_details' player_id=active_player.id session_id=session.pk %}"
@@ -79,5 +85,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script src="{% static 'game/timer.js' %}"></script>
 </body>
 </html>
