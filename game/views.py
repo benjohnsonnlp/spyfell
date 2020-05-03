@@ -118,3 +118,10 @@ def remove_session(request, player_id, session_id):
     session = get_object_or_404(Session, pk=session_id)
     session.delete()
     return HttpResponseRedirect(reverse("session_list", args=[player_id]))
+
+
+def remove_player(request, player_id, session_id, victim_id):
+    player = get_object_or_404(Player, pk=victim_id)
+    player.active_session = None
+    player.save()
+    return HttpResponseRedirect(reverse('session_details', args=(player_id, session_id,)))
